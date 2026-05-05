@@ -663,18 +663,26 @@ strong {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(19, 36, 18, 0.46), transparent 42%);
+  background:
+    linear-gradient(to bottom, rgba(19, 36, 18, 0.38), transparent 34%),
+    linear-gradient(to top, rgba(19, 36, 18, 0.28), transparent 38%);
 }
 
 .hero-card-main figcaption {
   position: absolute;
-  left: 1.2rem;
-  right: 1.2rem;
-  bottom: 1.1rem;
+  top: 1.1rem;
+  left: 1.1rem;
   z-index: 1;
+  max-width: min(22rem, calc(100% - 2.2rem));
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 20, 16, 0.58);
   color: var(--color-white);
   font-weight: 700;
-  font-size: 0.98rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  box-shadow: 0 10px 28px rgba(16, 20, 16, 0.22);
+  backdrop-filter: blur(6px);
 }
 
 .hero-stat-card {
