@@ -48,7 +48,7 @@ Then open `http://localhost:8000` in a browser.
 
 ## Analytics
 
-Vercel Web Analytics is included in `index.html`. Local preview loads Vercel's debug analytics script so you can confirm events in the browser console. Production analytics data requires the site to be deployed on Vercel with Web Analytics enabled for the project.
+Vercel Web Analytics is included in `index.html` using Vercel's static HTML snippet. Analytics data requires the site to be deployed on Vercel with Web Analytics enabled for the project. If analytics was enabled after the code was added, redeploy the site and promote the latest deployment to production.
 
 ## Design Notes
 
