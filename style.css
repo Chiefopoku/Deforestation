@@ -1196,11 +1196,40 @@ strong {
   gap: 1.15rem;
 }
 
+.event-card {
+  grid-column: 1 / -1;
+}
+
+.event-country-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.event-country-group {
+  padding: 1rem;
+  border: 1px solid rgba(45, 90, 39, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(244, 248, 240, 0.62);
+}
+
+.event-country-group h4 {
+  margin-bottom: 0.85rem;
+  color: var(--color-primary);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
 .action-card ul,
 .event-list {
   display: grid;
   gap: 0.85rem;
   margin-top: 1rem;
+}
+
+.event-country-group .event-list {
+  margin-top: 0;
 }
 
 .action-card li,
@@ -1220,7 +1249,8 @@ strong {
 }
 
 .volunteer-card .btn,
-.mentorship-card .btn {
+.mentorship-card .btn,
+.inventory-card .btn {
   margin-top: 1.2rem;
 }
 
@@ -1789,6 +1819,7 @@ strong {
   .feature-card-grid,
   .impact-grid,
   .action-grid,
+  .event-country-grid,
   .toolkit-grid,
   .biblical-grid,
   .footer-grid {
