@@ -22,6 +22,7 @@ function initializeApp() {
     initResourceSearch();
     initAnimatedCounters();
     initBackToTop();
+    initActiveNavigation();
   } catch (e) {
     console.error("Error initializing app:", e);
   }
@@ -146,6 +147,7 @@ function initFormValidation() {
 
   contactForm.addEventListener("submit", function (e) {
     e.preventDefault();
+    const submitButton = this.querySelector('button[type="submit"]');
 
     const formData = new FormData(this);
     const errors = validateForm(formData);
@@ -154,9 +156,13 @@ function initFormValidation() {
     clearFormErrors();
 
     if (errors.length === 0) {
+      setSubmitState(submitButton, true);
       sendContactEmail(formData);
       showFormSuccess();
       this.reset();
+      setTimeout(() => {
+        setSubmitState(submitButton, false);
+      }, 2000);
     } else {
       // Show errors
       showFormErrors(errors);
@@ -285,6 +291,19 @@ function showFormErrors(errors) {
       field.classList.add("error");
     }
   });
+}
+
+function setSubmitState(button, isSubmitting) {
+  if (!button) return;
+
+  if (!button.dataset.originalText) {
+    button.dataset.originalText = button.textContent;
+  }
+
+  button.disabled = isSubmitting;
+  button.textContent = isSubmitting
+    ? "Opening Email..."
+    : button.dataset.originalText;
 }
 
 function getContactEmail() {
@@ -417,17 +436,24 @@ function initAccessibility() {
 function initResourceSearch() {
   const searchInput = document.querySelector("#resource-search");
   const resourceCards = document.querySelectorAll(".resource-card");
+  const emptyState = document.querySelector(".resource-empty-state");
 
   if (!searchInput || !resourceCards.length) return;
 
   searchInput.addEventListener("input", function () {
     const query = this.value.toLowerCase().trim();
+    let visibleCount = 0;
 
     resourceCards.forEach((card) => {
       const text = card.textContent.toLowerCase();
       const isVisible = query === "" || text.includes(query);
       card.style.display = isVisible ? "block" : "none";
+      if (isVisible) visibleCount += 1;
     });
+
+    if (emptyState) {
+      emptyState.hidden = visibleCount > 0;
+    }
   });
 }
 
@@ -515,33 +541,38 @@ function initBackToTop() {
   });
 }
 
-/**
- * Utility functions
- */
+function initActiveNavigation() {
+  const navLinks = document.querySelectorAll('.nav-list > li > a[href^="#"]');
+  const sections = Array.from(navLinks)
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
 
-// Debounce function for performance
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
+  if (!navLinks.length || !sections.length) return;
 
-// Throttle function for performance
-function throttle(func, limit) {
-  let inThrottle;
-  return function () {
-    const args = arguments;
-    const context = this;
-    if (!inThrottle) {
-      func.apply(context, args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
+  const setActiveLink = (sectionId) => {
+    navLinks.forEach((link) => {
+      link.classList.toggle(
+        "is-active",
+        link.getAttribute("href") === `#${sectionId}`,
+      );
+    });
   };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visibleEntries = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+      if (visibleEntries[0]) {
+        setActiveLink(visibleEntries[0].target.id);
+      }
+    },
+    {
+      rootMargin: "-35% 0px -55% 0px",
+      threshold: [0.1, 0.25, 0.5],
+    },
+  );
+
+  sections.forEach((section) => observer.observe(section));
 }
