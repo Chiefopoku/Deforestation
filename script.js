@@ -4,54 +4,35 @@
  * Handles navigation, smooth scrolling, form validation, and accessibility
  */
 
-import { injectSpeedInsights } from "@vercel/speed-insights";
-
-// Inject Speed Insights
-injectSpeedInsights();
+const CONTACT_EMAIL_PARTS = ["dXJiYW5zaGFkZTM3", "QGdtYWlsLmNvbQ=="];
 
 // Utility: Decode obfuscated email
 function decodeEmail(encodedEmail) {
   return atob(encodedEmail);
 }
 
+// Initialize all functions
+function initializeApp() {
+  try {
+    initNavigation();
+    initSmoothScrolling();
+    initFormValidation();
+    initScrollEffects();
+    initAccessibility();
+    initResourceSearch();
+    initAnimatedCounters();
+    initBackToTop();
+  } catch (e) {
+    console.error("Error initializing app:", e);
+  }
+}
+
 // DOM Content Loaded
-document.addEventListener("DOMContentLoaded", function () {
-  initNavigation();
-  initSmoothScrolling();
-  initFormValidation();
-  initScrollEffects();
-  initAccessibility();
-  initResourceSearch();
-  initAnimatedCounters();
-  initBackToTop();
-  initEmailProtection();
-});
-
-/**
- * Initialize email protection
- * Decode obfuscated email to prevent bot harvesting
- */
-function initEmailProtection() {
-  const emailSpan = document.getElementById("contact-email");
-  if (!emailSpan || !emailSpan.dataset.email) return;
-
-  const decodedEmail = decodeEmail(emailSpan.dataset.email);
-
-  // Display the email address
-  emailSpan.textContent = decodedEmail;
-
-  // Make it a mailto link
-  emailSpan.style.cursor = "pointer";
-  emailSpan.addEventListener("click", function () {
-    window.location.href = "mailto:" + decodedEmail;
-  });
-  emailSpan.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" || e.key === " ") {
-      window.location.href = "mailto:" + decodedEmail;
-    }
-  });
-  emailSpan.setAttribute("role", "link");
-  emailSpan.setAttribute("tabindex", "0");
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeApp);
+} else {
+  // DOM is already loaded (can happen with modules)
+  initializeApp();
 }
 
 /**
@@ -65,11 +46,13 @@ function initNavigation() {
   if (!navToggle || !siteNav) return;
 
   // Toggle menu on button click
-  navToggle.addEventListener("click", function () {
+  navToggle.addEventListener("click", function (e) {
+    e.stopPropagation(); // Prevent event bubbling
     const isOpen = siteNav.classList.contains("is-open");
 
     // Toggle menu visibility
     siteNav.classList.toggle("is-open");
+    navToggle.classList.toggle("is-open");
 
     // Update aria-expanded
     navToggle.setAttribute("aria-expanded", !isOpen);
@@ -107,6 +90,7 @@ function initNavigation() {
 
   function closeMobileMenu() {
     siteNav.classList.remove("is-open");
+    navToggle.classList.remove("is-open");
     navToggle.setAttribute("aria-expanded", "false");
     navToggle.setAttribute("aria-label", "Open navigation menu");
     document.body.style.overflow = "auto";
@@ -129,13 +113,15 @@ function initSmoothScrolling() {
   anchorLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       const targetId = this.getAttribute("href");
+      if (!targetId || targetId === "#") return;
+
       const targetElement = document.querySelector(targetId);
 
       if (targetElement) {
         e.preventDefault();
 
-        const headerHeight =
-          document.querySelector(".site-header").offsetHeight;
+        const siteHeader = document.querySelector(".site-header");
+        const headerHeight = siteHeader ? siteHeader.offsetHeight : 0;
         const targetPosition = targetElement.offsetTop - headerHeight - 20;
 
         window.scrollTo({
@@ -168,7 +154,7 @@ function initFormValidation() {
     clearFormErrors();
 
     if (errors.length === 0) {
-      // Form is valid - in a real app, you'd submit to a server
+      sendContactEmail(formData);
       showFormSuccess();
       this.reset();
     } else {
@@ -191,6 +177,7 @@ function validateForm(formData) {
 
   const name = formData.get("name")?.trim();
   const email = formData.get("email")?.trim();
+  const interest = formData.get("interest")?.trim();
   const message = formData.get("message")?.trim();
 
   if (!name || name.length < 2) {
@@ -204,6 +191,13 @@ function validateForm(formData) {
     errors.push({
       field: "email",
       message: "Please enter a valid email address.",
+    });
+  }
+
+  if (!interest) {
+    errors.push({
+      field: "interest",
+      message: "Please select an area of interest.",
     });
   }
 
@@ -233,6 +227,12 @@ function validateField(field) {
       if (!value || !isValidEmail(value)) {
         isValid = false;
         message = "Please enter a valid email address.";
+      }
+      break;
+    case "interest":
+      if (!value) {
+        isValid = false;
+        message = "Please select an area of interest.";
       }
       break;
     case "message":
@@ -287,12 +287,37 @@ function showFormErrors(errors) {
   });
 }
 
+function getContactEmail() {
+  return decodeEmail(CONTACT_EMAIL_PARTS.join(""));
+}
+
+function sendContactEmail(formData) {
+  const recipient = getContactEmail();
+  const name = formData.get("name")?.trim();
+  const email = formData.get("email")?.trim();
+  const interest = formData.get("interest")?.trim();
+  const message = formData.get("message")?.trim();
+  const subject = `Urban Shade Initiative inquiry from ${name}`;
+  const body = [
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Area of Interest: ${interest}`,
+    "",
+    "Message:",
+    message,
+  ].join("\n");
+
+  window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
+}
+
 function showFormSuccess() {
   const form = document.querySelector(".contact-form");
   const successMessage = document.createElement("div");
   successMessage.className = "form-success";
   successMessage.textContent =
-    "Thank you for your message! We'll get back to you soon.";
+    "Your email app should open with the message ready to send.";
   successMessage.style.cssText = `
     background: var(--color-primary-soft);
     color: var(--color-primary-dark);
@@ -432,8 +457,15 @@ function initAnimatedCounters() {
 }
 
 function animateCounter(element) {
-  const target = parseFloat(element.textContent.replace(/[^\d.]/g, ""));
-  const suffix = element.textContent.replace(/[\d.]/g, "");
+  const originalText = element.textContent.trim();
+  if (/\d\s*[–-]\s*\d/.test(originalText)) return;
+
+  const numberMatch = originalText.match(/\d+(?:\.\d+)?/);
+  if (!numberMatch) return;
+
+  const target = parseFloat(numberMatch[0]);
+  const prefix = originalText.slice(0, numberMatch.index);
+  const suffix = originalText.slice(numberMatch.index + numberMatch[0].length);
   const duration = 2000; // 2 seconds
   const start = performance.now();
   const startValue = 0;
@@ -446,12 +478,12 @@ function animateCounter(element) {
     const easeOutQuart = 1 - Math.pow(1 - progress, 4);
     const currentValue = startValue + (target - startValue) * easeOutQuart;
 
-    element.textContent = Math.floor(currentValue) + suffix;
+    element.textContent = prefix + Math.floor(currentValue) + suffix;
 
     if (progress < 1) {
       requestAnimationFrame(update);
     } else {
-      element.textContent = target + suffix;
+      element.textContent = originalText;
     }
   }
 

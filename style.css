@@ -1694,7 +1694,7 @@ strong {
 
 @media (max-width: 900px) {
   .nav-toggle {
-    display: inline-grid;
+    display: inline-grid !important;
     place-items: center;
     flex-shrink: 0;
   }
@@ -1719,7 +1719,7 @@ strong {
       opacity var(--transition-medium),
       transform var(--transition-medium);
     backdrop-filter: blur(16px);
-    z-index: 999;
+    z-index: 1000;
   }
 
   .site-nav.is-open {
