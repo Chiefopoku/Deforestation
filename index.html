@@ -31,15 +31,29 @@
 
     <link rel="stylesheet" href="style.css" />
 
-    <!-- Vercel Analytics -->
+    <!-- Vercel Web Analytics -->
     <script>
       window.va =
         window.va ||
         function () {
           (window.vaq = window.vaq || []).push(arguments);
         };
+
+      (function () {
+        var isLocal =
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1" ||
+          location.hostname === "";
+        var script = document.createElement("script");
+
+        script.defer = true;
+        script.src = isLocal
+          ? "https://cdn.vercel-insights.com/v1/script.debug.js"
+          : "/_vercel/insights/script.js";
+
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <!-- Skip Link for Accessibility -->

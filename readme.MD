@@ -46,6 +46,10 @@ python3 -m http.server 8000
 
 Then open `http://localhost:8000` in a browser.
 
+## Analytics
+
+Vercel Web Analytics is included in `index.html`. Local preview loads Vercel's debug analytics script so you can confirm events in the browser console. Production analytics data requires the site to be deployed on Vercel with Web Analytics enabled for the project.
+
 ## Design Notes
 
 - **Mobile-first mindset**: The layout adapts cleanly to small screens with stacked navigation and card layouts.
