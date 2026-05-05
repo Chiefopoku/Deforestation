@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
   initFormValidation();
   initScrollEffects();
   initAccessibility();
+  initResourceSearch();
+  initAnimatedCounters();
+  initBackToTop();
 });
 
 /**
@@ -293,7 +296,7 @@ function initScrollEffects() {
 
   // Observe cards for animation
   const cards = document.querySelectorAll(
-    ".feature-card, .impact-card, .resource-card, .action-card",
+    ".feature-card, .impact-card, .resource-card, .action-card, .biblical-card",
   );
   cards.forEach((card) => {
     observer.observe(card);
@@ -343,6 +346,103 @@ function initAccessibility() {
       }
     });
   }
+}
+
+/**
+ * Initialize resource search functionality
+ */
+function initResourceSearch() {
+  const searchInput = document.querySelector("#resource-search");
+  const resourceCards = document.querySelectorAll(".resource-card");
+
+  if (!searchInput || !resourceCards.length) return;
+
+  searchInput.addEventListener("input", function () {
+    const query = this.value.toLowerCase().trim();
+
+    resourceCards.forEach((card) => {
+      const text = card.textContent.toLowerCase();
+      const isVisible = query === "" || text.includes(query);
+      card.style.display = isVisible ? "block" : "none";
+    });
+  });
+}
+
+/**
+ * Initialize animated counters for impact stats
+ */
+function initAnimatedCounters() {
+  const counters = document.querySelectorAll(".impact-number");
+
+  if (!counters.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.5 },
+  );
+
+  counters.forEach((counter) => {
+    observer.observe(counter);
+  });
+}
+
+function animateCounter(element) {
+  const target = parseFloat(element.textContent.replace(/[^\d.]/g, ""));
+  const suffix = element.textContent.replace(/[\d.]/g, "");
+  const duration = 2000; // 2 seconds
+  const start = performance.now();
+  const startValue = 0;
+
+  function update(currentTime) {
+    const elapsed = currentTime - start;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Easing function for smooth animation
+    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+    const currentValue = startValue + (target - startValue) * easeOutQuart;
+
+    element.textContent = Math.floor(currentValue) + suffix;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = target + suffix;
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+/**
+ * Initialize back-to-top button functionality
+ */
+function initBackToTop() {
+  const backToTopBtn = document.querySelector(".back-to-top");
+
+  if (!backToTopBtn) return;
+
+  // Show/hide button based on scroll position
+  window.addEventListener("scroll", function () {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    backToTopBtn.style.opacity = scrollTop > 300 ? "1" : "0";
+    backToTopBtn.style.pointerEvents = scrollTop > 300 ? "auto" : "none";
+  });
+
+  // Smooth scroll to top
+  backToTopBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
 }
 
 /**
