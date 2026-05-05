@@ -4,11 +4,6 @@
  * Handles navigation, smooth scrolling, form validation, and accessibility
  */
 
-import { injectSpeedInsights } from "@vercel/speed-insights";
-
-// Inject Speed Insights
-injectSpeedInsights();
-
 // DOM Content Loaded
 document.addEventListener("DOMContentLoaded", function () {
   initNavigation();
