@@ -9,6 +9,11 @@ import { injectSpeedInsights } from "@vercel/speed-insights";
 // Inject Speed Insights
 injectSpeedInsights();
 
+// Utility: Decode obfuscated email
+function decodeEmail(encodedEmail) {
+  return atob(encodedEmail);
+}
+
 // DOM Content Loaded
 document.addEventListener("DOMContentLoaded", function () {
   initNavigation();
@@ -19,7 +24,35 @@ document.addEventListener("DOMContentLoaded", function () {
   initResourceSearch();
   initAnimatedCounters();
   initBackToTop();
+  initEmailProtection();
 });
+
+/**
+ * Initialize email protection
+ * Decode obfuscated email to prevent bot harvesting
+ */
+function initEmailProtection() {
+  const emailSpan = document.getElementById("contact-email");
+  if (!emailSpan || !emailSpan.dataset.email) return;
+
+  const decodedEmail = decodeEmail(emailSpan.dataset.email);
+
+  // Display the email address
+  emailSpan.textContent = decodedEmail;
+
+  // Make it a mailto link
+  emailSpan.style.cursor = "pointer";
+  emailSpan.addEventListener("click", function () {
+    window.location.href = "mailto:" + decodedEmail;
+  });
+  emailSpan.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      window.location.href = "mailto:" + decodedEmail;
+    }
+  });
+  emailSpan.setAttribute("role", "link");
+  emailSpan.setAttribute("tabindex", "0");
+}
 
 /**
  * Initialize mobile navigation toggle
