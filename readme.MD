@@ -56,9 +56,10 @@ Then open `http://localhost:8000` in a browser.
 ## Content Highlights
 
 - A mix of environmental resources for Ghana and US audiences
-- Government agencies, sustainability offices, public health organizations, and community nonprofits
+- Government agencies, sustainability offices, public health organizations, community nonprofits, and federal housing programs
 - Biblical Perspective section with Scripture verses on stewardship, justice, compassion, and restoration
 - Action cards for advocacy, neighborhood tree planting, community petitions, and local engagement
+- Practical toolkits including advocacy guides and community tree planting instructions
 - Concise narratives linking urban canopy health to public health outcomes
 
 ## Future Improvements
