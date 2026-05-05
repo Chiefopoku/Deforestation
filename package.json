@@ -1,0 +1,21 @@
+{
+  "name": "urban-shade-initiative",
+  "version": "1.0.0",
+  "description": "A responsive static website promoting urban forestry, public health, and community action around deforestation and urban tree loss.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . --listen 3000"
+  },
+  "keywords": [
+    "urban-forestry",
+    "environmental",
+    "community",
+    "health"
+  ],
+  "author": "Urban Shade Initiative",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

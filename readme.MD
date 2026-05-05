@@ -19,6 +19,7 @@ The Urban Shade Initiative website combines environmental awareness with civic e
 - Accessible form and navigation with ARIA labels and visible focus states
 - Smooth scrolling, back-to-top button, and scroll-triggered animations
 - Expanded FAQ section with questions on urban trees, health benefits, participation, and challenges
+- Vercel Analytics integration for website traffic and user engagement tracking
 - Clean visual design using gradients, glassy panels, and soft shadows
 
 ## File Structure
