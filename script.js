@@ -580,3 +580,22 @@ function initActiveNavigation() {
   window.addEventListener("scroll", updateActiveLink, { passive: true });
   window.addEventListener("resize", updateActiveLink);
 }
+
+// Hide events whose end date has passed, so the list never shows stale dates.
+// Add data-end="YYYY-MM-DD" to each event <li>.
+(function hidePastEvents() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  document.querySelectorAll(".event-list").forEach((list) => {
+    list.querySelectorAll("li[data-end]").forEach((li) => {
+      const end = new Date(li.dataset.end + "T23:59:59");
+      if (end < today) li.remove();
+    });
+    if (!list.querySelector("li")) {
+      const note = document.createElement("li");
+      note.className = "event-empty";
+      note.textContent = "New events will be posted soon. Check back or get in touch.";
+      list.appendChild(note);
+    }
+  });
+})();
