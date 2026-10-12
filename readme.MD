@@ -1,80 +1,91 @@
 # Urban Shade Initiative
 
-A responsive static website designed to promote urban forestry, public health, and community action around deforestation and urban tree loss. The site showcases environmental resources, local and international agencies, action ideas, and a modern mobile-first interface for advocacy-focused storytelling.
+**Live site:** https://deforestation-phi.vercel.app/
 
-## Project Overview
+The Urban Shade Initiative is a public-health and environmental awareness website. It covers how urban tree loss affects heat, air quality, biodiversity and community well-being in Ghana and the United States, and what communities can do about it.
 
-The Urban Shade Initiative website combines environmental awareness with civic engagement. It highlights the relationship between urban trees, heat mitigation, air quality, biodiversity, and the health of communities in both Ghana and the United States. The site also integrates a biblical perspective on stewardship and community care, supported by relevant Scripture verses.
+It is a collaboration between **Michael Ago Tetteh** (Liberty University School of Public Health) and **Emmanuel Opoku-Adjei** (UNC Greensboro). Emmanuel co-created and built the site.
+
+## What's on the site
+
+- **Why it matters:** cleaner air, cooler streets, living ecosystems and healthier communities.
+- **Biblical perspective:** stewardship, justice, compassion and restoration, each supported by a Scripture verse.
+- **Visual comparison:** before-and-after images of low-canopy and tree-rich neighbourhoods.
+- **Impact snapshot:** key figures from the EPA, the US Forest Service and the City of Lynchburg, with sources cited.
+- **The issues:** urban heat islands, air quality and respiratory health, biodiversity loss, and mental and community health.
+- **Resources and toolkit:**
+  - A searchable directory of Ghanaian and US agencies and organisations.
+  - An advocacy starter guide.
+  - A community tree-planting guide.
+  - An FAQ.
+- **Take action:** upcoming events in Ghana and the US, volunteer paths, government agencies to contact, and how to start a tree inventory.
+- **About, contact and sources:** the team, mission and vision; a contact form that opens a prefilled email; and the full reference list.
 
 ## Features
 
-- Responsive layout optimized for desktop, tablet, and mobile screens
-- Sticky header with modern navigation and a mobile hamburger menu
-- Hero section with a strong environmental message and quick action links
-- Biblical Perspective section connecting faith-based stewardship to urban greening
-- Resource cards for Ghanaian and US government agencies, nonprofits, and local sustainability programs
-- Interactive resource search bar for filtering agencies and topics
-- Animated impact counters with smooth easing effects
-- Action and advocacy sections to help visitors get involved
-- Accessible form and navigation with ARIA labels and visible focus states
-- Smooth scrolling, back-to-top button, and scroll-triggered animations
-- Expanded FAQ section with questions on urban trees, health benefits, participation, and challenges
-- Vercel Analytics integration for website traffic and user engagement tracking
-- Clean visual design using gradients, glassy panels, and soft shadows
+- A responsive, mobile-first layout with a sticky header and a mobile menu.
+- **Search:** live filtering of the resource directory.
+- **Impact counters:** the figures count up as they scroll into view.
+- **Events list:** events hide themselves after their end date (see below).
+- **Navigation:** smooth scrolling, scroll-triggered animations and a back-to-top link.
+- **Accessibility:** a skip link, ARIA labels, visible focus states and form validation.
+- **Vercel Web Analytics.**
 
-## File Structure
+## File structure
 
-- `index.html` - Main website markup and section structure
-- `style.css` - Full site styling, responsive breakpoints, custom properties, and visual effects
-- `script.js` - Client-side behavior for mobile navigation, smooth scroll, form validation, search, animations, and accessibility
-- `images/` - Asset folder for logo and supporting visuals
-- `readme.MD` - Project documentation and usage instructions
+```
+index.html     all page content and sections
+style.css      styles, responsive breakpoints and custom properties
+script.js      navigation, search, counters, animations, form, event expiry
+images/        logo, favicon and section images
+package.json   Vercel Analytics and Speed Insights; Node 24 for Vercel builds
+```
 
-## Installation & Local Preview
+## Run locally
 
-No build tools are required. To preview the site locally:
-
-1. Open the project folder in your code editor.
-2. Serve the directory with a static server.
-
-Example using Python:
+No build step is needed:
 
 ```bash
-cd '/Users/chiefopoku/Downloads/Deforestation'
+git clone <this repository>
+cd Deforestation
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000` in a browser.
+Then open http://localhost:8000.
 
-## Analytics
+## Updating events
 
-Vercel Web Analytics is included in `index.html` using Vercel's static HTML snippet. Analytics data requires the site to be deployed on Vercel with Web Analytics enabled for the project. If analytics was enabled after the code was added, redeploy the site and promote the latest deployment to production.
+Each event in the **Take Action** section has an end date, for example:
 
-## Design Notes
+```html
+<li data-end="2026-11-19">
+  <strong>Partners in Community Forestry Conference</strong>
+  <span>Date: November 18-19, 2026</span>
+  <span>Location: St. Louis, Missouri; hosted by Arbor Day</span>
+</li>
+```
 
-- **Mobile-first mindset**: The layout adapts cleanly to small screens with stacked navigation and card layouts.
-- **Modern header**: A translucent sticky header with subtle blur and shadow keeps navigation visible without dominating page content.
-- **Accessible navigation**: Focus-visible styles, skip links, and properly labeled buttons ensure better usability.
-- **Visual hierarchy**: Bold headings, section eyebrow labels, and descriptive cards help readers scan key ideas quickly.
-- **Interactive elements**: Live search, animated counters, and smooth scrolling enhance engagement without overwhelming the content.
+- Once the date in `data-end` has passed, the event is hidden automatically. Use `YYYY-MM-DD` format.
+- If a country's list becomes empty, it shows "New events will be posted soon."
+- Add new events in the same format. Recurring events such as Green Ghana Day (usually in June) and the Great NC Tree Conference (October) are good candidates for each new year.
 
-## Content Highlights
+## Sources
 
-- A mix of environmental resources for Ghana and US audiences
-- Government agencies, sustainability offices, public health organizations, community nonprofits, and federal housing programs
-- Biblical Perspective section with Scripture verses on stewardship, justice, compassion, and restoration
-- Action cards for advocacy, neighborhood tree planting, community petitions, and local engagement
-- Practical toolkits including advocacy guides and community tree planting instructions
-- Concise narratives linking urban canopy health to public health outcomes
+The figures on the page come from the following sources, which are also listed at the bottom of the site:
 
-## Future Improvements
+- The U.S. Environmental Protection Agency, on heat islands.
+- Nowak et al. for the U.S. Forest Service, on air-pollution removal by urban trees.
+- The City of Lynchburg, on its Tree City USA award and tree-canopy initiative.
+- The American Public Health Association.
+- The Nature Conservancy.
 
-- Add additional images or iconography for impact and visual storytelling
-- Convert the site into a multi-page experience with deeper resource detail pages
-- Enhance the contact form with email integration and submission feedback
-- Add a dark mode option for improved accessibility in low-light environments
-- Expand the Biblical Perspective with more interactive elements or study guides
+## Possible next steps
 
-## Notes
+- **Interactive comparison:** a before-and-after slider for the comparison images.
+- **Pledge form:** a sign-up form for the Community Commitment section, linked to a form service.
+- **Dark mode.**
+- **Deeper content:** separate pages with more detail on each resource category.
 
-This project is intended as a static awareness and advocacy website, suitable for GitHub Pages or any static web host.
+## Credits
+
+Created by Michael Ago Tetteh and Emmanuel Opoku-Adjei, in collaboration with the Liberty University School of Public Health. &copy; 2026 Urban Shade Initiative.
